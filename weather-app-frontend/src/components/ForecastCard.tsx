@@ -14,6 +14,10 @@ interface ForecastCardProps {
 }
 
 const ForecastCard: React.FC<ForecastCardProps> = ({ forecast, convertTemp }) => {
+    if (!forecast || !Array(forecast) || forecast.length === 0) {
+        return <p className="text-red-500">Forecast data is not available</p>
+    }
+
   return (
     <div>
       <h3 className="text-xl font-semibold mb-4">3-Day Forecast</h3>

@@ -24,12 +24,12 @@ interface WeatherData {
 }
 
 interface WeatherDashboardProps {
-  apiKey?: string;
+  
   defaultCity?: string;
 }
 
 const WeatherDashboard = ({
-  apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY,
+  //apiKey = process.env.OPENWEATHERMAP_API_KEY,
   defaultCity = "London",
 }: WeatherDashboardProps) => {
   const [city, setCity] = useState(defaultCity);
@@ -41,37 +41,24 @@ const WeatherDashboard = ({
   const fetchWeather = async (cityName: string) => {
     try {
       setLoading(true);
-      setError(null); 
-
-      // api endpoint to fetch details from the weather open api key
+      setError(null);
+  
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`
+        `http://localhost:8000/api/weather?city=${cityName}&unit=${isCelsius ? "metric" : "imperial"}`
       );
       if (!response.ok) throw new Error("City not found");
+  
       const data = await response.json();
-
-      const forecastResponse = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=metric`
-      );
-      const forecastData = await forecastResponse.json();
-
+  
       setWeather({
-        temp: data.main.temp,
-        feels_like: data.main.feels_like,
-        humidity: data.main.humidity,
-        description: data.weather[0].description,
-        wind_speed: data.wind.speed,
-        city: data.name,
-        icon: data.weather[0].icon,
-        forecast: forecastData.list
-          .filter((item: any) => item.dt_txt.includes("12:00:00"))
-          .slice(0, 3)
-          .map((item: any) => ({
-            date: item.dt_txt,
-            temp: item.main.temp,
-            description: item.weather[0].description,
-            icon: item.weather[0].icon,
-          })),
+        temp: data.temp,
+        feels_like: data.feels_like,
+        humidity: data.humidity,
+        description: data.description,
+        wind_speed: data.wind_speed,
+        city: data.city,
+        icon: data.icon,
+        forecast: data.forecast, 
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch weather data");
@@ -80,7 +67,6 @@ const WeatherDashboard = ({
       setLoading(false);
     }
   };
-
   const convertTemp = (temp: number): string =>
     isCelsius ? `${Math.round(temp)}°C` : `${Math.round((temp * 9) / 5 + 32)}°F`;
 

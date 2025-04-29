@@ -4,6 +4,7 @@ A modern weather application built with Next.js (TypeScript) for the frontend an
 
 ![Home Screen](./image/image1.png)
 ![Home Screen](./image/image2.png)
+![Home Screen](./image/image3.png)
 
 
 🧭 Project Overview

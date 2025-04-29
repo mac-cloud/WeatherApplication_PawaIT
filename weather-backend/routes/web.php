@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\WeatherController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,6 +11,7 @@ Route::get('/', function () {
 
 Route::get('/admin', [AdminController::class, 'index'])->middleware('auth');
 
+Route::get('/api/weather', [WeatherController::class, 'getWeather']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
